@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Gerador de Certificado de Calibração de Pipetas</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<style>
+body { font-family: Arial, sans-serif; background: #f5f7fb; margin: 0; padding: 20px; }
+.container { max-width: 1000px; margin: auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+h1 { text-align: center; color: #0b5fb1; }
+form { display: grid; gap: 12px; margin-bottom: 20px; }
+label { font-weight: bold; }
+input, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 6px; width: 100%; }
+button { background: #0b5fb1; color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+button:hover { background: #000e57; }
+.preview { border: 1px solid #ccc; padding: 20px; border-radius: 8px; margin-top: 20px; background: #fdfdfd; }
+.ensaios { border: 1px solid #ddd; padding: 10px; border-radius: 6px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.modal-bg { position: fixed; top: 0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index:1000;}
+.modal { background: #fff; padding: 20px; border-radius: 12px; width: 400px; max-width: 90%; max-height: 90%; overflow-y: auto; z-index:1001;}
+.modal h3 { margin-top: 0; }
+.modal input { width: 100%; margin-bottom: 6px; }
+
+/* Estilo para tabelas da prévia */
+.styled-table {
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+  width: 100%;
+  text-align: center;
+}
+.styled-table th {
+  background-color: #0b5fb1;
+  color: white;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+.styled-table td {
+  padding: 6px;
+  border: 1px solid #ccc;
+}
+.styled-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { jsPDF } = window.jspdf;
+
+function App() {
+  const [data, setData] = React.useState({
+    laboratorio: "",
+    endereco: "",
+    responsavel: "",
+    pipeta: "",
+    modelo: "",
+    serie: "",
+    resultados: [{ valorNominal: "", valorMedido: "", valores10: Array(10).fill("") }],
+    conformidade: "",
+  });
+
+  const [fundoPersonalizado, setFundoPersonalizado] = React.useState(null);
+  const [modalAberto, setModalAberto] = React.useState(false);
+  const [modalIndex, setModalIndex] = React.useState(null);
+  const [modalValores, setModalValores] = React.useState(Array(10).fill(""));
+
+  const [modalErroAberto, setModalErroAberto] = React.useState(false);
+  const [modalErroLinhas, setModalErroLinhas] = React.useState([{ equipamento: '', volume: '', tolerancia: '' }]);
+  const [erroLimite, setErroLimite] = React.useState([]);
+
+  // helper para números (aceita vírgula)
+  const toNumber = (v) => {
+    const n = parseFloat(String(v ?? "").replace(',', '.'));
+    return isNaN(n) ? 0 : n;
+  };
+
+  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const handleResultadoChange = (index, campo, value) => {
+    const novosResultados = [...data.resultados];
+    novosResultados[index][campo] = value;
+    setData({ ...data, resultados: novosResultados });
+  };
+  const adicionarResultado = () =>
+    setData({
+      ...data,
+      resultados: [...data.resultados, { valorNominal: "", valorMedido: "", valores10: Array(10).fill("") }],
+    });
+
+  const carregarTemplate = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => setFundoPersonalizado(event.target.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Modal 10 valores medidos
+  const abrirModal = (index) => {
+    setModalIndex(index);
+    setModalValores([...data.resultados[index].valores10]);
+    setModalAberto(true);
+  };
+  const salvarModal = () => {
+    const invalidos = modalValores.some(v => v.trim() === "" || isNaN(parseFloat(v.replace(',', '.'))));
+    if(invalidos){
+      alert("Todos os 10 valores devem ser preenchidos e numéricos.");
+      return;
+    }
+    const novosResultados = [...data.resultados];
+    novosResultados[modalIndex].valores10 = [...modalValores];
+    const numerosValidos = modalValores.map(v => toNumber(v));
+    const media = numerosValidos.reduce((a,b)=>a+b,0)/numerosValidos.length;
+    novosResultados[modalIndex].valorMedido = media.toFixed(3);
+    setData({...data, resultados: novosResultados});
+    setModalAberto(false);
+  };
+
+  // Modal Tabela Erro Limite
+  const abrirModalErro = () => {
+    setModalErroLinhas(erroLimite.length ? [...erroLimite] : [{ equipamento: '', volume: '', tolerancia: '' }]);
+    setModalErroAberto(true);
+  };
+  const adicionarLinhaErro = () => setModalErroLinhas([...modalErroLinhas, { equipamento: '', volume: '', tolerancia: '' }]);
+  const atualizarLinhaErro = (index, campo, valor) => {
+    const novasLinhas = [...modalErroLinhas];
+    novasLinhas[index][campo] = valor;
+    setModalErroLinhas(novasLinhas);
+  };
+  const salvarModalErro = () => {
+    const invalidos = modalErroLinhas.some(l => l.equipamento.trim()==="" || l.volume.trim()==="" || l.tolerancia.trim()==="");
+    if(invalidos){
+      alert("Todos os campos da Tabela de Erro Limite devem ser preenchidos.");
+      return;
+    }
+    setErroLimite([...modalErroLinhas]);
+    setModalErroAberto(false);
+  };
+
+  // Cálculos
+  const calcularErro = (valorMedido, valorNominal) => toNumber(valorMedido) - toNumber(valorNominal);
+  const calcularK = () => 2;
+
+  // VEFF corrigido: recebe cada resultado individualmente
+  const calcularVEFF = (resultado) => {
+    const valores = (resultado.valores10 || []).map(v => toNumber(v)).filter(v => !isNaN(v));
+    if (valores.length < 2) return 0;
+    const media = valores.reduce((a,b)=>a+b,0)/valores.length;
+    const variancia = valores.reduce((a,b)=>a + Math.pow(b - media,2),0)/(valores.length - 1);
+    return variancia;
+  };
+
+  // Incerteza detalhada
+  const calcularIncertezaDetalhada = (resultado) => {
+    if (!resultado || (resultado.valores10||[]).every(v => String(v).trim() === "")) 
+      return { u_rep:0, u_res:0, u_bias:0, u_c:0, U:0 };
+
+    if (erroLimite.length === 0) 
+      return { u_rep:0, u_res:0, u_bias:0, u_c:0, U:0 };
+
+    const valores = (resultado.valores10||[]).map(v => toNumber(v)).filter(v => !isNaN(v));
+    if (valores.length < 2) 
+      return { u_rep:0, u_res:0, u_bias:0, u_c:0, U:0 };
+
+    const media = valores.reduce((a,b)=>a+b,0) / valores.length;
+    const variancia = valores.reduce((a,b)=>a + Math.pow(b - media,2),0) / (valores.length - 1);
+    const desvioPadrao = Math.sqrt(variancia);
+    const u_rep = desvioPadrao / Math.sqrt(valores.length);
+
+    const vn = toNumber(resultado.valorNominal);
+    const linha = erroLimite.reduce((prev, curr) => {
+      const pv = toNumber(prev.volume);
+      const cv = toNumber(curr.volume);
+      return Math.abs(cv - vn) < Math.abs(pv - vn) ? curr : prev;
+    });
+    const tolerancia = toNumber(linha.tolerancia);
+
+    const u_res = tolerancia / Math.sqrt(3);
+    const u_bias = tolerancia / Math.sqrt(3);
+
+    const u_c = Math.sqrt(u_rep*u_rep + u_res*u_res + u_bias*u_bias);
+    const U = calcularK() * u_c;
+
+    return { u_rep, u_res, u_bias, u_c, U };
+  };
+
+  const calcularIncertezaPorLinha = (resultado) => calcularIncertezaDetalhada(resultado).U;
+
+  // PDF
+  const generatePDF = () => {
+    if(!fundoPersonalizado){
+      alert("Carregue um template antes de gerar o PDF.");
+      return;
+    }
+
+    const doc = new jsPDF();
+    const img = new Image();
+    img.src = fundoPersonalizado;
+    img.onload = () => {
+      doc.addImage(img, 'PNG', 0, 0, 210, 297);
+
+      doc.setFontSize(11);
+      doc.text(`Laboratório: ${data.laboratorio}`, 20, 50);
+      doc.text(`Endereço: ${data.endereco}`, 20, 58);
+      doc.text(`Responsável: ${data.responsavel}`, 20, 66);
+      doc.text(`Equipamento: ${data.pipeta}`, 20, 82);
+      doc.text(`Modelo: ${data.modelo}`, 20, 90);
+      doc.text(`Nº de Série: ${data.serie}`, 20, 98);
+      doc.text(`Conformidade (ISO 8655): ${data.conformidade}`, 20, 106);
+
+      // Tabela principal
+      doc.autoTable({
+        startY: 120,
+        head: [['Valor Nominal','Valor Medido','Erro (E)','Incerteza (U)','K','VEFF']],
+        body: data.resultados.map(r=>[
+          r.valorNominal,
+          r.valorMedido,
+          calcularErro(r.valorMedido,r.valorNominal).toFixed(3),
+          calcularIncertezaPorLinha(r).toFixed(3),
+          calcularK(),
+          calcularVEFF(r).toFixed(3)
+        ]),
+        theme: 'grid',
+        headStyles: { fillColor: [11,95,177], textColor: 255 },
+        alternateRowStyles: { fillColor: [240,240,240] }
+      });
+
+      // Tabela detalhada de incerteza
+      doc.autoTable({
+        startY: doc.lastAutoTable.finalY + 10,
+        head: [['Valor Nominal','u_rep','u_res','u_bias','u_c','U']],
+        body: data.resultados.map(r=>{
+          const inc = calcularIncertezaDetalhada(r);
+          return [
+            r.valorNominal,
+            inc.u_rep.toFixed(3),
+            inc.u_res.toFixed(3),
+            inc.u_bias.toFixed(3),
+            inc.u_c.toFixed(3),
+            inc.U.toFixed(3)
+          ];
+        }),
+        theme: 'grid',
+        headStyles: { fillColor: [11,95,177], textColor: 255 },
+        alternateRowStyles: { fillColor: [240,240,240] }
+      });
+
+      const yFinal = doc.lastAutoTable.finalY + 20;
+      doc.text(`Data: ${new Date().toLocaleDateString("pt-BR")}`, 20, yFinal);
+      doc.text("_____________________________", 20, yFinal + 30);
+      doc.text("Assinatura do Responsável", 20, yFinal + 38);
+
+      doc.save("certificado_calibracao.pdf");
+    };
+  };
+
+  return (
+    <div className="container">
+      <h1>Gerador de Certificado de Pipetas</h1>
+
+      <form>
+        <label>Carregar Template (PNG ou JPG)</label>
+        <input type="file" accept="image/*" onChange={carregarTemplate} />
+
+        <label>Laboratório</label>
+        <input name="laboratorio" value={data.laboratorio} onChange={handleChange} />
+
+        <label>Endereço</label>
+        <input name="endereco" value={data.endereco} onChange={handleChange} />
+
+        <label>Responsável Técnico</label>
+        <input name="responsavel" value={data.responsavel} onChange={handleChange} />
+
+        <label>Equipamento (Pipeta)</label>
+        <input name="pipeta" value={data.pipeta} onChange={handleChange} />
+
+        <label>Modelo</label>
+        <input name="modelo" value={data.modelo} onChange={handleChange} />
+
+        <label>Nº de Série</label>
+        <input name="serie" value={data.serie} onChange={handleChange} />
+
+        <label>Conformidade</label>
+        <input name="conformidade" value={data.conformidade} onChange={handleChange} />
+
+        <label>Ensaios (Valores Nominais)</label>
+        {data.resultados.map((r,i)=>(
+          <div key={i} className="ensaios">
+            <input placeholder="Valor Nominal" value={r.valorNominal} onChange={e=>handleResultadoChange(i,'valorNominal',e.target.value)} />
+            <button type="button" onClick={()=>abrirModal(i)}>Inserir 10 Valores</button>
+          </div>
+        ))}
+        <button type="button" onClick={adicionarResultado}>Adicionar Valor Nominal</button>
+      </form>
+
+      <button type="button" onClick={abrirModalErro}>Montar Tabela de Erro Limite</button>
+
+      <h3>Prévia do Certificado</h3>
+      <div className="preview" style={{ 
+          position: 'relative', 
+          padding: '20px', 
+          minHeight: '500px', 
+          backgroundImage: fundoPersonalizado ? `url(${fundoPersonalizado})` : 'none', 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center', 
+          color: '#000' 
+        }}>
+        <p><b>Laboratório:</b> {data.laboratorio}</p>
+        <p><b>Endereço:</b> {data.endereco}</p>
+        <p><b>Responsável:</b> {data.responsavel}</p>
+        <p><b>Pipeta:</b> {data.pipeta} | <b>Modelo:</b> {data.modelo} | <b>Série:</b> {data.serie}</p>
+        <p><b>Conformidade:</b> {data.conformidade}</p>
+
+        <h4>Tabela de Resultados</h4>
+        <table className="styled-table">
+          <thead>
+            <tr>
+              <th>Valor Nominal</th>
+              <th>Valor Medido</th>
+              <th>Erro (E)</th>
+              <th>Incerteza (U)</th>
+              <th>K</th>
+              <th>VEFF</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.resultados.map((r,i)=>{
+              const inc = calcularIncertezaPorLinha(r);
+              return (
+                <tr key={i}>
+                  <td>{r.valorNominal}</td>
+                  <td>{r.valorMedido}</td>
+                  <td>{calcularErro(r.valorMedido,r.valorNominal).toFixed(3)}</td>
+                  <td>{erroLimite.length>0 ? inc.toFixed(3) : 'N/A'}</td>
+                  <td>{calcularK()}</td>
+                  <td>{calcularVEFF(r).toFixed(3)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        <h4>Tabela Detalhada de Incerteza</h4>
+        <table className="styled-table">
+          <thead>
+            <tr>
+              <th>Valor Nominal</th>
+              <th>u_rep</th>
+              <th>u_res</th>
+              <th>u_bias</th>
+              <th>u_c</th>
+              <th>U</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.resultados.map((r,i)=>{
+              const inc = calcularIncertezaDetalhada(r);
+              return (
+                <tr key={i}>
+                  <td>{r.valorNominal}</td>
+                  <td>{inc.u_rep.toFixed(3)}</td>
+                  <td>{inc.u_res.toFixed(3)}</td>
+                  <td>{inc.u_bias.toFixed(3)}</td>
+                  <td>{inc.u_c.toFixed(3)}</td>
+                  <td>{inc.U.toFixed(3)}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <button type="button" onClick={generatePDF}>Gerar PDF</button>
+
+      {modalAberto && (
+        <div className="modal-bg">
+          <div className="modal">
+            <h3>Inserir 10 Valores Medidos</h3>
+            {modalValores.map((v,i)=>(
+              <input key={i} value={v} onChange={e=>{ const novos=[...modalValores]; novos[i]=e.target.value; setModalValores(novos); }} placeholder={`Valor ${i+1}`} />
+            ))}
+            <button onClick={salvarModal}>Salvar</button>
+            <button onClick={()=>setModalAberto(false)}>Cancelar</button>
+          </div>
+        </div>
+      )}
+
+      {modalErroAberto && (
+        <div className="modal-bg">
+          <div className="modal">
+            <h3>Tabela de Erro Limite</h3>
+            {modalErroLinhas.map((l,i)=>(
+              <div key={i}>
+                <input placeholder="Equipamento" value={l.equipamento} onChange={e=>atualizarLinhaErro(i,'equipamento',e.target.value)} />
+                <input placeholder="Volume Nominal" value={l.volume} onChange={e=>atualizarLinhaErro(i,'volume',e.target.value)} />
+                <input placeholder="Tolerância" value={l.tolerancia} onChange={e=>atualizarLinhaErro(i,'tolerancia',e.target.value)} />
+              </div>
+            ))}
+            <button onClick={adicionarLinhaErro}>Adicionar Linha</button>
+            <button onClick={salvarModalErro}>Salvar</button>
+            <button onClick={()=>setModalErroAberto(false)}>Cancelar</button>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+</script>
+</body>
+</html>
