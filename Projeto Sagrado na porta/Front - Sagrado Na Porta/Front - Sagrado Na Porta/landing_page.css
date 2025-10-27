@@ -1,0 +1,61 @@
+
+.barra-navegacao {
+    background: transparent;
+}
+
+
+
+form {
+    align-items: center;
+    align-content: center;
+    align-self: center;
+}
+
+#inputBuscar .form-control {
+    /* From https://css.glass */
+    background: rgba(124, 48, 131, 0.71);
+    border-radius: 0 10px 10px 0;
+    border-style: none;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12.2px);
+    -webkit-backdrop-filter: blur(12.2px);
+    border: 1px solid rgba(124, 48, 131, 0.43);
+    color: #ce9647;
+}
+
+#inputBuscar .input-group-text {
+    /* From https://css.glass */
+    background: rgba(124, 48, 131, 0.71);
+    border-radius: 10px 0 0 10px;
+    border-style: none;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12.2px);
+    -webkit-backdrop-filter: blur(12.2px);
+    border: 1px solid rgba(124, 48, 131, 0.43);
+    color: #ce9647;
+}
+
+#inputBuscar .form-control::placeholder {
+    color: #FFF;
+}
+
+#cadastro_empresa {
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.42);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 1);
+    height: 360px;
+
+}
+
+.rodape{
+    bottom: 0;
+    height: 200px;
+    background: #7C3083 no-repeat;
+    background: linear-gradient(135deg, #7C3083, #010101) no-repeat;
+    display: flex;
+    align-items: center;
+}

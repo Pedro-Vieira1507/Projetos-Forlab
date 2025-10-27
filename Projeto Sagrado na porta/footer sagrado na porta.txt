@@ -1,0 +1,120 @@
+<style>
+.footer {
+            background: var(--primary-color);
+            color: var(--text-color);
+            padding: 40px 0;
+        }
+
+        .footer a {
+            color: var(--text-color);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        .footer a:hover {
+            opacity: 1;
+            color: var(--secondary-color);
+        }
+
+        .footer h5 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-color);
+            color: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: var(--text-color);
+            color: var(--primary-color);
+        }
+        .mb-0 {
+            margin-bottom: 0!important;
+            position: relative;
+            top: 20px;
+        }
+        hr{
+            border: none; 
+            height: 2px;
+            background-color: black;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transition: box-shadow 5.0s ease;">
+        }
+        .me-4 {
+            margin-right: 1.5rem!important;
+            position: relative;
+            top: -3px;
+        }
+</style>
+
+<body>
+<footer class="footer mt-5 pt-4" style="background: #7C3083; background: linear-gradient(135deg, #7C3083, #010101); color: #fff;">
+    <div class="container">
+        <div class="row">
+            <!-- Institucional -->
+            <div class="col-md-3 col-6 mb-3">
+                <h5 class="fw-bold">Institucional</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white text-decoration-none">Sobre nós</a></li>
+                    <li><a href="#" class="text-white text-decoration-none">Trabalhe conosco</a></li>
+                    <li><a href="#" class="text-white text-decoration-none">Política de Privacidade</a></li>
+                    <li><a href="#" class="text-white text-decoration-none">Termos de Uso</a></li>
+                </ul>
+            </div>
+
+            <!-- Ajuda e Suporte -->
+            <div class="col-md-3 col-6 mb-3">
+                <h5 class="fw-bold">Ajuda</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white text-decoration-none">Central de atendimento</a></li>
+                    <li><a href="#" class="text-white text-decoration-none">Prazos e entregas</a></li>
+                    <li><a href="#" class="text-white text-decoration-none">Devoluções e reembolsos</a></li>
+                    <li><a href="#" class="text-white text-decoration-none">Perguntas frequentes</a></li>
+                </ul>
+            </div>
+
+            <!-- Formas de Pagamento -->
+            <div class="col-md-3 col-6 mb-3">
+                <h5 class="fw-bold">Formas de Pagamento</h5>
+                <ul class="list-unstyled d-flex flex-wrap">
+                    <li class="me-2"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="Mastercard" width="40"></li>
+                    <li class="me-2"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" width="40"></li>
+                    <li class="me-2"><img src="https://img.icons8.com/color/512/pix.png" alt="Pix" width="25"></li>
+                    <li class="me-4"><img src="https://logospng.org/download/mercado-pago/logo-mercado-pago-icone-1024.png" alt="MP" width="35"></li>
+                </ul>
+                <h5 class="fw-bold">Redes Sociais</h5>
+                <div class="d-flex">
+                    <a href="#" class="text-white me-3" style="font-size: 24px;"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white me-3" style="font-size: 24px;"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white me-3" style="font-size: 24px;"><i class="bi bi-whatsapp"></i></a>
+                    <a href="#" class="text-white" style="font-size: 24px;"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div> 
+            <div class="col-md-3 col-6 mb-3">
+                <div class="d-flex">
+                    <img src="Logo.png" width="150px">
+                </div>
+            </div>                               
+        </div>
+
+        <!-- Direitos Autorais -->
+        <div class="text-center">
+            <hr class="hr">
+            <p class="mb-0">&copy; 2025 Loja Sagrado. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</footer>
+</body>

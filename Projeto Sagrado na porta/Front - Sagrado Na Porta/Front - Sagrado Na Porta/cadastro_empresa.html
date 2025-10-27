@@ -1,0 +1,152 @@
+{% extends 'base_institucional.html' %}
+
+{% block conteudo %}
+<div class="container-fluid" style="background-color: #FFF;">
+    <div class="container">
+        <h2 style="color: #7B3083;">Cadastro de Estabelecimento</h2>
+        <form action="#" method="post" class="p-5" id="cadastro_empresa">
+            <div id="step_1" class="step">
+                <div class="h4 pb-2 mb-4" style="color: #7B3083; border-bottom: 1px solid #7B3083;">
+                    <h3>Dados do Estabelecimento</h3>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <label>CNPJ</label>
+                        <input class="form-control cnpj" type="text" name="Endereco" id="rua">
+                    </div>
+                    <div class="col-5">
+                        <label>Nome do Estabelecimento</label>
+                        <input class="form-control" type="text" name="" id="cep">
+                    </div>
+                    <div class="col-5">
+                        <label>Razão Social</label>
+                        <input class="form-control" type="text" name="" id="cep">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <label>Inscrição Municipal</label>
+                        <input class="form-control" type="text" name="Numero">
+                    </div>
+                    <div class="col-3">
+                        <label>Inscrição Estadual</label>
+                        <input class="form-control" type="text" name="Complemento">
+                    </div>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-3">
+                        <label>CPF</label>
+                        <input class="form-control" type="text" name="Complemento">
+                    </div>
+                    <div class="col-3">
+                        <label>Senha</label>
+                        <input class="form-control" type="text" name="Complemento">
+                    </div>
+                </div>
+            </div>
+            <div id="step_2" class="step">
+                <div class="h4 pb-2 mb-4" style="color: #7B3083; border-bottom: 1px solid #7B3083;">
+                    <h3>Endereço do Estabelecimento</h3>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <label>CEP</label>
+                        <input class="form-control cep" type="text" name="CEP" id="cep"
+                            onblur="pesquisacep(this.value);">
+                    </div>
+                    <div class="col-6">
+                        <label>Endereço</label>
+                        <input class="form-control bg-secondary-subtle" type="text" name="Endereco" id="rua" readonly>
+                    </div>
+                    <div class="col-1">
+                        <label>Numero</label>
+                        <input class="form-control" type="text" name="Numero">
+                    </div>
+                    <div class="col-3">
+                        <label>Complemento</label>
+                        <input class="form-control" type="text" name="Complemento">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <label>Bairro</label>
+                        <input class="form-control bg-secondary-subtle" type="text" name="Bairro" id="bairro" readonly>
+                    </div>
+                    <div class="col-4">
+                        <label>Cidade</label>
+                        <input class="form-control bg-secondary-subtle" type="text" name="Cidade" id="cidade" readonly>
+                    </div>
+                    <div class="col-2">
+                        <label>Estado</label>
+                        <input class="form-control bg-secondary-subtle" type="text" name="Estado" id="uf" readonly>
+                    </div>
+                    <div class="col-2">
+                        <label>País</label>
+                        <input class="form-control bg-secondary-subtle" type="text" name="Pais" id="pais" readonly>
+                    </div>
+                </div>
+            </div>
+            <div id="step_3" class="step">
+                <div class="h4 pb-2 mb-4" style="color: #7B3083; border-bottom: 1px solid #7B3083;">
+                    <h3>Dados Bancários - Repasse</h3>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <label>Nome do Responsável</label>
+                        <input class="form-control" type="text" name="Endereco" id="rua">
+                    </div>
+                    <div class="col-3">
+                        <label>Email do Proprietário</label>
+                        <input class="form-control" type="text" name="Numero">
+                    </div>
+                    <div class="col-4">
+                        <label>Periodo de Pagamento</label>
+                        <select class="form-select" aria-label="Default select example">
+                            <option value="1">Semanal</option>
+                            <option value="2">Quinzenal</option>
+                            <option value="3">Mensal</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label>Forma de Pagamento</label>
+                        <select class="form-select" aria-label="Default select example">
+                            <option value="1">PIX</option>
+                            <option value="2">Transferência Bancária</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <label>Banco</label>
+                        <select class="form-select" aria-label="Default select example">
+                            <option value="1">Banco do Brasil</option>
+                            <option value="2">Santander</option>
+                            <option value="1">Caixa Econômica</option>
+                            <option value="2">Itaú</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <label>Agencia</label>
+                        <input class="form-control" type="text" name="Estado" id="uf">
+                    </div>
+                    <div class="col-2">
+                        <label>Conta</label>
+                        <input class="form-control" type="text" name="Pais" id="pais">
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <div class="row mt-3 mb-5">
+            <div class="col-lg-6 text-start">
+                <button class="btn btn-block btn-secondary" id="prev">Anterior</button>
+            </div>
+            <div class="col-lg-6 text-end">
+                <button class="btn btn-block btn-secondary" id="next">Próximo</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pt-br" data-bs-theme="auto">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Central de Ajuda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .navbar {
+        background-color: #7B3083;
+      }
+      .navbar-brand,
+      .navbar-text,
+      .botaoPerfil,
+      .botaoCarrinho,
+      .botaoSair,
+      .infoEndereco {
+        color: #efb600;
+      }
+      .section-title {
+        color: #7B3083;
+        margin-bottom: 30px;
+      }
+      .quem-somos {
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        margin-bottom: 40px;
+      }
+      .footer {
+        background: var(--primary-color);
+        color: var(--text-color);
+        padding: 40px 0;
+      }
+      .footer a {
+        color: var(--text-color);
+        text-decoration: none;
+        opacity: 0.8;
+        transition: 0.3s;
+      }
+      .footer a:hover {
+        opacity: 1;
+        color: var(--secondary-color);
+      }
+      .footer h5 {
+        color: var(--secondary-color);
+        font-size: 18px;
+        margin-bottom: 15px;
+      }
+      .social-icons a {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        background: var(--secondary-color);
+        color: var(--bg-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 20px;
+        transition: 0.3s;
+      }
+      .social-icons a:hover {
+        background: var(--text-color);
+        color: var(--primary-color);
+      }
+      .mb-0 {
+        margin-bottom: 0!important;
+        position: relative;
+        top: 20px;
+      }
+      hr {
+        border: none; 
+        height: 2px;
+        background-color: black;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        transition: box-shadow 5.0s ease;
+      }
+      .me-4 {
+        margin-right: 1.5rem!important;
+        position: relative;
+        top: -3px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a href="#" class="navbar-brand">
+          <img src="Logo.png" width="50" alt="Logo">
+        </a>
+        <div class="d-flex align-items-center ms-auto">
+          <span class="navbar-text me-2">Apelido do Usuário</span>
+          <a href="#" class="btn btn-default ps-3 botaoPerfil"><i class="bi bi-person-circle"></i></a>
+          <button class="btn btn-default botaoCarrinho ps-3 position-relative">
+            <i class="bi bi-cart"></i>
+          </button>
+          <a href="#" class="btn btn-default ps-3 botaoSair"><i class="bi bi-box-arrow-in-right"></i></a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <div class="quem-somos">
+        <h2 class="section-title text-center">Central de Ajuda</h2>
+        <p class="text-center mb-5">Bem-vindo à nossa Central de Ajuda! Aqui você encontra respostas para as dúvidas mais frequentes e orientações para utilizar nossos serviços da melhor forma possível.</p>
+    
+        <div class="row text-center">
+          <!-- Entregas -->
+          <div class="col-md-4 mb-4">
+            <h5 class="fw-bold">📦 Entregas</h5>
+            <p class="text-muted small" style="text-align: justify;">Os prazos variam conforme sua localização e forma de envio escolhida. Após a confirmação do pagamento, acompanhe o status da entrega pelo seu perfil.</p>
+          </div>
+    
+          <!-- Trocas e Devoluções -->
+          <div class="col-md-4 mb-4">
+            <h5 class="fw-bold">🔄 Trocas e Devoluções</h5>
+            <p class="text-muted small" style="text-align: justify;">Você pode solicitar a troca ou devolução em até 7 dias após o recebimento. Acesse “Meus Pedidos” e selecione a opção “Solicitar Troca/Devolução”.</p>
+          </div>
+    
+          <!-- Pagamentos -->
+          <div class="col-md-4 mb-4">
+            <h5 class="fw-bold">💳 Pagamentos</h5>
+            <p class="text-muted small" style="text-align: justify;">Aceitamos Pix, boleto bancário, cartões de crédito (Visa, MasterCard) e Mercado Pago. Em caso de falha no pagamento, tente novamente ou entre em contato com seu banco.</p>
+          </div>
+    
+          <!-- Segurança -->
+          <div class="col-md-4 mb-4">
+            <h5 class="fw-bold">🔐 Segurança</h5>
+            <p class="text-muted small" style="text-align: justify;">Seus dados estão protegidos conosco. Utilizamos tecnologia de criptografia e não armazenamos informações sensíveis de pagamento.</p>
+          </div>
+    
+          <!-- Atendimento -->
+          <div class="col-md-4 mb-4">
+            <h5 class="fw-bold">📞 Atendimento</h5>
+            <p class="text-muted small" style="text-align: justify;">Nosso time está pronto para te ajudar! Você pode entrar em contato pelo WhatsApp, e-mail ou redes sociais. Atendemos de segunda a sexta, das 9h às 18h.</p>
+          </div>
+    
+          <!-- Compras Seguras (novo tópico) -->
+          <div class="col-md-4 mb-4">
+            <h5 class="fw-bold">🛒 Compras Seguras</h5>
+            <p class="text-muted small" style="text-align: justify;">Garantimos uma experiência de compra segura, com sistemas atualizados e verificação antifraude para proteger você em todas as etapas.</p>
+          </div>
+        </div>
+    
+        <!-- Contato - Fale Conosco -->
+        <div class="container mt-5">
+          <div class="p-0 text-center bg-white shadow-sm rounded">
+            <h4 class="fw-bold mb-4">Se não encontrou o que procurava, fale conosco</h4>
+            <div class="row justify-content-center">
+              
+              <!-- WhatsApp -->
+              <div class="col-md-4 mb-4">
+                <div class="p-4 text-center">
+                  <i class="bi bi-whatsapp" style="font-size: 2.5rem; color: #25D366;"></i>
+                  <h5 class="mt-3 fw-bold">WhatsApp</h5>
+                  <p class="text-muted small mb-2">Fale conosco diretamente</p>
+                  <a href="https://wa.me/SEUNUMERO" target="_blank" class="btn btn-outline-success btn-sm mt-2">Iniciar conversa</a>
+                </div>
+              </div>
+
+              <!-- E-mail -->
+              <div class="col-md-4 mb-4">
+                <div class="p-4 text-center">
+                  <i class="bi bi-envelope" style="font-size: 2.5rem; color: #7B3083;"></i>
+                  <h5 class="mt-3 fw-bold">E-mail</h5>
+                  <p class="text-muted small mb-2">Envie suas dúvidas</p>
+                  <a href="mailto:seuemail@exemplo.com" class="btn btn-outline-primary btn-sm mt-2">Enviar e-mail</a>
+                </div>
+              </div>
+            </div> 
+          </div> 
+        </div> 
+      </div> 
+    </div>              
+    
+
+    <!-- Rodapé -->
+    <footer class="footer mt-5 pt-4" style="background: #7C3083; background: linear-gradient(135deg, #7C3083, #010101); color: #fff;">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3 col-6 mb-3">
+            <h5 class="fw-bold">Institucional</h5>
+            <ul class="list-unstyled">
+              <li><a href="#" class="text-white text-decoration-none">Sobre nós</a></li>
+              <li><a href="#" class="text-white text-decoration-none">Trabalhe conosco</a></li>
+              <li><a href="#" class="text-white text-decoration-none">Política de Privacidade</a></li>
+              <li><a href="#" class="text-white text-decoration-none">Termos de Uso</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-3 col-6 mb-3">
+            <h5 class="fw-bold">Ajuda</h5>
+            <ul class="list-unstyled">
+              <li><a href="#" class="text-white text-decoration-none">Central de atendimento</a></li>
+              <li><a href="#" class="text-white text-decoration-none">Prazos e entregas</a></li>
+              <li><a href="#" class="text-white text-decoration-none">Devoluções e reembolsos</a></li>
+              <li><a href="#" class="text-white text-decoration-none">Perguntas frequentes</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-3 col-6 mb-3">
+            <h5 class="fw-bold">Formas de Pagamento</h5>
+            <ul class="list-unstyled d-flex flex-wrap">
+              <li class="me-2"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="Mastercard" width="40"></li>
+              <li class="me-2"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" width="40"></li>
+              <li class="me-2"><img src="https://img.icons8.com/color/512/pix.png" alt="Pix" width="25"></li>
+              <li class="me-4"><img src="https://logospng.org/download/mercado-pago/logo-mercado-pago-icone-1024.png" alt="MP" width="35"></li>
+            </ul>
+            <h5 class="fw-bold">Redes Sociais</h5>
+            <div class="d-flex">
+              <a href="#" class="text-white me-3" style="font-size: 24px;"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="text-white me-3" style="font-size: 24px;"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="text-white me-3" style="font-size: 24px;"><i class="bi bi-whatsapp"></i></a>
+              <a href="#" class="text-white" style="font-size: 24px;"><i class="bi bi-youtube"></i></a>
+            </div>
+          </div> 
+          <div class="col-md-3 col-6 mb-3">
+            <div class="d-flex">
+              <img src="Logo.png" width="150px">
+            </div>
+          </div>                               
+        </div>
+        <div class="text-center">
+          <hr class="hr">
+          <p class="mb-0">&copy; 2025 Loja Sagrado. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

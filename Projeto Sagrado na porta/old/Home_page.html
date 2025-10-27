@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Sagrado - Delivery de Produtos Religiosos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* Cores personalizadas */
+        :root {
+            --primary-color: #3b3b58; /* Roxo */
+            --secondary-color: #f8c471; /* Dourado */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin-top: 60px; /* Para compensar a barra de navegação */
+        }
+
+        /* Barra de navegação */
+        .navbar {
+            background-color: var(--primary-color) !important;
+        }
+
+        .navbar-text {
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand, .nav-link {
+            color: var(--secondary-color) !important;
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: #fff !important;
+        }
+
+        /* Banner Principal */
+        .banner {
+            width: 100%;
+            height: 400px;
+            background: url('https://static.vecteezy.com/ti/vetor-gratis/p1/2707512-fundo-roxo-e-dourado-luxuoso-vetor.jpg') no-repeat center center;
+            background-size: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .banner-text {
+            text-align: center;
+            margin: 0;
+        }
+
+        .category-badge {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .category-badge:hover {
+            background-color: #f8c471;
+            color: var(--primary-color);
+        }
+
+        .card-body {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .card img {
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Estilo para o campo de endereço no banner */
+        .address-input-container {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .address-input-container input {
+            border-radius: 10px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .address-input-container button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .address-input-container button:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra de navegação -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Loja Sagrado</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contato</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner Principal com campo de endereço -->
+    <div class="banner">
+        <div class="address-input-container">
+            <h3>Digite seu Endereço de Entrega</h3>
+            <input type="text" class="form-control" placeholder="Digite seu endereço, bairro ou cidade" required>
+            <button class="btn btn-primary">Confirmar Endereço</button>
+        </div>
+    </div>
+
+    <!-- Categorias -->
+    <div class="container mt-5 text-center">
+        <h3 class="mb-4">Categorias Populares</h3>
+        <div class="d-flex justify-content-center flex-wrap">
+            <span class="category-badge">Velas</span>
+            <span class="category-badge">Incensos</span>
+            <span class="category-badge">Imagens Religiosas</span>
+            <span class="category-badge">Livros Espirituais</span>
+        </div>
+    </div>
+
+    <!-- Produtos em Destaque -->
+    <div class="container mt-5">
+        <h3 class="mb-4 text-center">Produtos em Destaque</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Produto 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Vela Espiritual</h5>
+                        <p class="card-text">Para momentos de oração e reflexão.</p>
+                        <button class="btn btn-primary">Comprar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Produto 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Incenso de Rosas</h5>
+                        <p class="card-text">Aroma suave para terapias.</p>
+                        <button class="btn btn-primary">Comprar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Produto 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Imagem de Nossa Senhora</h5>
+                        <p class="card-text">Imagens sagradas para seu altar.</p>
+                        <button class="btn btn-primary">Comprar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-columns">
+            <div class="footer-column">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Home_page.html">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contato</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <p class="directed">© 2025 Loja Sagrado - Todos os Direitos Reservados</p>
+            </div>
+            <!--
+            <div class="footer-column">
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Termos de Serviço</a>
+            </div>
+            -->
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" type="image/png" href="Favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        .botaoPerfil, .botaoCarrinho, .botaoSair {
+            color: #efb600;
+            font-size: 20px;
+        }
+        .infoEndereco {
+            color: #efb600;
+        }
+        .cards_banners {
+            height: 400px;
+            max-height: 400px;
+            background-color: #7B3083;
+            border-radius: 28px;
+        }
+        .popover {
+            background-color: #fff;
+            border: 1px solid #efb600;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px; /* Aumentar a largura do popover */
+            padding: 15px;
+            font-size: 1rem;
+            color: #333;
+            --bs-popover-zindex: 1070;
+            --bs-popover-max-width: 298px;
+            --bs-popover-font-size: 0.875rem;
+            --bs-popover-bg: var(--bs-body-bg);
+            --bs-popover-border-width: var(--bs-border-width);
+            --bs-popover-border-color: var(--bs-border-color-translucent);
+            --bs-popover-border-radius: var(--bs-border-radius-lg);
+            --bs-popover-inner-border-radius: calc(var(--bs-border-radius-lg) - var(--bs-border-width));
+            --bs-popover-box-shadow: var(--bs-box-shadow);
+            --bs-popover-header-padding-x: 1rem;
+            --bs-popover-header-padding-y: 0.5rem;
+            --bs-popover-header-font-size: 1rem;
+            --bs-popover-header-color: inherit;
+            --bs-popover-header-bg: var(--bs-secondary-bg);
+            --bs-popover-body-padding-x: 1rem;
+            --bs-popover-body-padding-y: 1rem;
+            --bs-popover-body-color: var(--bs-body-color);
+            --bs-popover-arrow-width: 1rem;
+            --bs-popover-arrow-height: 0.5rem;
+            --bs-popover-arrow-border: var(--bs-popover-border-color);
+            z-index: var(--bs-popover-zindex);
+            display: block;
+            max-width: var(--bs-popover-max-width);
+            font-family: var(--bs-font-sans-serif);
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: left;
+            text-align: start;
+            text-decoration: none;
+            text-shadow: none;
+            text-transform: none;
+            letter-spacing: normal;
+            word-break: normal;
+            white-space: normal;
+            word-spacing: normal;
+            line-break: auto;
+            font-size: var(--bs-popover-font-size);
+            word-wrap: break-word;
+            background-color: var(--bs-popover-bg);
+            background-clip: padding-box;
+            border: var(--bs-popover-border-width) solid var(--bs-popover-border-color);
+            border-radius: var(--bs-popover-border-radius);
+        }
+        
+        .list-unstyled {
+            color: #333;
+        }
+        .navbar {
+            background-color: #7B3083;
+        }
+        .navbar-brand {
+            color: #fff;
+        }
+        .navbar-text {
+            color: #efb600;
+        }
+        .btn {
+            font-size: 16px;
+            border-radius: 12px;
+        }
+        .btn-primary {
+            background-color: #7B3083;
+            border: none;
+        }
+        .comprar-btn {
+            background-color: #7B3083;
+            border-radius: 12px;
+            border: none;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .card-body {
+            padding: 15px;
+        }
+        .card {
+            border: none;
+            margin-bottom: 15px;
+        }
+        .gap-0 {
+            gap: 0 !important;
+        }
+        .lh-1 {
+            line-height: 1;
+        }
+        .align-items-center {
+            align-items: center !important;
+        }
+        .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .position-relative {
+            position: relative !important;
+        }
+        .position-absolute {
+            position: absolute;
+        }
+        .top-1 {
+            top: -5px;
+        }
+        .start-100 {
+            left: 100%;
+        }
+        .translate-middle {
+            transform: translate(-50%, -50%);
+        }
+        .p-2 {
+            padding: 0.5rem;
+        }
+        .me-2 {
+            margin-right: 0.5rem;
+        }
+        .text-end {
+            text-align: end;
+        }
+        .d-flex {
+            display: flex;
+        }
+        .align-self-end {
+            align-self: flex-end;
+        }
+        .text-start {
+            text-align: start;
+        }
+        .btn-outline-secondary {
+            border-color: #7B3083;
+            color: #7B3083;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #7B3083;
+            color: white;
+        }
+        .footer {
+            background: var(--primary-color);
+            color: var(--text-color);
+            padding: 40px 0;
+        }
+
+        .footer a {
+            color: var(--text-color);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        .footer a:hover {
+            opacity: 1;
+            color: var(--secondary-color);
+        }
+
+        .footer h5 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-color);
+            color: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: var(--text-color);
+            color: var(--primary-color);
+        }
+        .mb-0 {
+            margin-bottom: 0!important;
+            position: relative;
+            top: 20px;
+        }
+        hr{
+            border: none; 
+            height: 2px;
+            background-color: black;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transition: box-shadow 5.0s ease;">
+        }
+        .me-4 {
+            margin-right: 1.5rem!important;
+            position: relative;
+            top: -3px;
+        }
+        
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="navbar-brand">
+                <img src="Logo.png" width="50px">
+            </a>
+            <div class="d-flex">
+                <div class="container-fluid">
+                    <span class="navbar-text align-items-center infoEndereco">Rua das Amarguras, 7</span>
+                </div>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="container-fluid">
+                    <span class="navbar-text me-2 align-items-center">Apelido do Usuário</span>
+                </div>
+                <a href="#" class="btn btn-default ps-3 botaoPerfil"><i class="bi bi-person-circle"></i></a>
+                <button type="button" class="btn btn-default botaoCarrinho ps-3 position-relative" id="carrinho" data-bs-toggle="popover" data-bs-trigger="click"> 
+                    <i class="bi bi-cart"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle p-2" style="font-size: 12px">
+                        <span id="cart-count"></span>
+                    </span>
+                </button>
+                <a href="#" class="btn btn-default ps-3 botaoSair"><i class="bi bi-box-arrow-in-right"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="popover-content" class="d-none">
+        <ul id="cart-items" class="list-unstyled"></ul>
+        <hr>        
+        <a href="checkout.html" class="btn btn-success" id="checkoutButton" style="background-color: #7B3083;">Finalizar Compra</a>
+    </div>
+    
+    
+
+    <div class="container mt-5 mb-3" style="max-width: 800px; height: 300px; background: #7B3083; border-radius: 16px;"></div>
+    <div class="container mt-5" style="max-width: 700px;">
+        <div class="row">
+            <h5 class="mb-3" style="color: #a6a6a6;"><strong>Produtos</strong></h5>
+            <a href="#" class="btn btn-outline-default" role="button"
+                style="border-radius: 14px; border-color: #7B3083; color: #7B3083; max-width: 80px;"> Velas</a>
+            <div class="col-12">
+                <div class="card" style="border: none;">
+                    <div class="card-body">
+                        <div class="row align-items-center position-relative">
+                            <div class="col-2">
+                                <img src="https://placehold.co/100x100?text=Produto" style="border-radius: 15px;">
+                            </div>
+                            <div class="col text-start gap-0 lh-1">
+                                <div class="d-flex justify-content-between">
+                                    <h2 style="font-size: 18px; color: #7B3083;" maxlength="100" class="lh-1">
+                                        <strong>Vela de 7 dias Orixá 310g</strong>
+                                    </h2>
+                                </div>
+                                <p class="lh-1" style="color: #a6a6a6;">Velas</p>
+                            </div>
+                            <div class="col-2 text-end align-self-end">
+                                <p style="font-size: 20px; color: #7B3083;"><strong>R$ 7,50</strong></p>
+                                <button class="btn btn-primary comprar-btn" data-nome="Vela de 7 dias Orixá 310g" data-preco="7.50">Comprar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer mt-5 pt-4" style="background: #7C3083; background: linear-gradient(135deg, #7C3083, #010101); color: #fff;">
+        <div class="container">
+            <div class="row">
+                <!-- Institucional -->
+                <div class="col-md-3 col-6 mb-3">
+                    <h5 class="fw-bold">Institucional</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">Sobre nós</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Trabalhe conosco</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Política de Privacidade</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Termos de Uso</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Ajuda e Suporte -->
+                <div class="col-md-3 col-6 mb-3">
+                    <h5 class="fw-bold">Ajuda</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">Central de atendimento</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Prazos e entregas</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Devoluções e reembolsos</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Perguntas frequentes</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Formas de Pagamento -->
+                <div class="col-md-3 col-6 mb-3">
+                    <h5 class="fw-bold">Formas de Pagamento</h5>
+                    <ul class="list-unstyled d-flex flex-wrap">
+                        <li class="me-2"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="Mastercard" width="40"></li>
+                        <li class="me-2"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" width="40"></li>
+                        <li class="me-2"><img src="https://img.icons8.com/color/512/pix.png" alt="Pix" width="25"></li>
+                        <li class="me-4"><img src="https://logospng.org/download/mercado-pago/logo-mercado-pago-icone-1024.png" alt="MP" width="35"></li>
+                    </ul>
+                    <h5 class="fw-bold">Redes Sociais</h5>
+                    <div class="d-flex">
+                        <a href="#" class="text-white me-3" style="font-size: 24px;"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3" style="font-size: 24px;"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white me-3" style="font-size: 24px;"><i class="bi bi-whatsapp"></i></a>
+                        <a href="#" class="text-white" style="font-size: 24px;"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div> 
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="d-flex">
+                        <img src="Logo.png" width="150px">
+                    </div>
+                </div>                   
+            </div>
+    
+            <!-- Direitos Autorais -->
+            <div class="text-center">
+                <hr class="hr">
+                <p class="mb-0">&copy; 2025 Loja Sagrado. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        $(document).ready(function () {
+            let carrinho = [];
+            let frete = 0;
+    
+            // Função para atualizar o conteúdo do carrinho
+            function atualizarCarrinho() {
+                let lista = "";
+                let total = 0;
+    
+                carrinho.forEach((item, index) => {
+                    let subtotal = item.preco * item.quantidade;
+                    total += subtotal;
+    
+                    lista += `<li>
+                        <strong>${item.nome}</strong>
+                        <hr>
+                        <strong>Subtotal:</strong> R$ ${subtotal.toFixed(2)}
+                    </li>`;
+                });
+    
+                total += frete;
+                $("#cart-items").html(lista);
+                $("#total-price").html(`Total: R$ ${total.toFixed(2)}`);
+                $("#cart-count").html(carrinho.length);
+            }
+    
+            // Calcular o frete
+            $("#calcularFrete").click(function () {
+                let cep = $("#cep").val().replace(/\D/g, '');
+    
+                if (cep.length === 8) {
+                    frete = 15.00;
+                    $("#frete-value").text(`Frete: R$ ${frete.toFixed(2)}`).show();
+                    atualizarCarrinho();
+                } else {
+                    alert("CEP inválido! Por favor, insira um CEP válido.");
+                }
+            });
+    
+            // Adicionar produto ao carrinho
+            function adicionarAoCarrinho(produto) {
+                let index = carrinho.findIndex(item => item.nome === produto.nome);
+                if (index === -1) {
+                    carrinho.push({...produto, quantidade: 1});
+                } else {
+                    carrinho[index].quantidade++;
+                }
+                atualizarCarrinho();
+            }
+    
+            // Alterar a quantidade de item no carrinho
+            function alterarQuantidade(index, delta) {
+                let novoQuantidade = carrinho[index].quantidade + delta;
+                if (novoQuantidade <= 0) {
+                    carrinho.splice(index, 1);
+                } else {
+                    carrinho[index].quantidade = novoQuantidade;
+                }
+                atualizarCarrinho();
+            }
+    
+            // Instanciar o popover com conteúdo do carrinho
+            $('#carrinho').popover({
+                content: function () {
+                    return $('#popover-content').html();
+                },
+                trigger: 'click',
+                html: true,
+                sanitize: false
+            });
+    
+            // Ação quando o popover é mostrado
+            $('#carrinho').on('shown.bs.popover', function () {
+                atualizarCarrinho();
+            });
+    
+            // Delegação de eventos para ajustar a quantidade de itens dentro do popover
+            $(document).on('click', '.ajustar-quantidade', function () {
+                let index = $(this).data("index");
+                let delta = $(this).data("delta");
+                alterarQuantidade(index, delta);
+            });
+    
+            // Fechar o popover ao clicar fora
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.popover, #carrinho').length) {
+                    $('#carrinho').popover('hide');
+                }
+            });
+    
+            // Evento de click no botão "Comprar"
+            $(".comprar-btn").click(function () {
+                let produto = {
+                    nome: $(this).data("nome"),
+                    preco: parseFloat($(this).data("preco"))
+                };
+                adicionarAoCarrinho(produto);
+            });
+        });
+        
+    </script>
+     
+</body>
+</html>
