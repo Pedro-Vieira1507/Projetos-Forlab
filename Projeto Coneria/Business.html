@@ -1,0 +1,22 @@
+<div class="wrap card">
+  <h2>⚙️ Cadastro de Produtos</h2>
+
+  <label>Nome do Produto</label>
+  <input id="productName" type="text" placeholder="Ex: Cone Trufado">
+
+  <label>Preço (R$)</label>
+  <input id="productPrice" type="number" step="0.01" placeholder="Ex: 5.50">
+
+  <button class="btn" onclick="addProduct()">➕ Adicionar Produto</button>
+
+  <h3 style="margin-top:20px">📦 Produtos Cadastrados</h3>
+  <ul id="productList"></ul>
+
+  <h3 style="margin-top:20px">🏪 Custo Mensal da Loja</h3>
+  <input id="storeCostInput" type="number" step="0.01" placeholder="Ex: 1500.00">
+  <button class="btn" onclick="saveStoreCost()">💾 Salvar Custo</button>
+
+  <div style="margin-top:20px">
+    <a href="index.html" class="btn ghost">⬅ Voltar</a>
+  </div>
+</div>

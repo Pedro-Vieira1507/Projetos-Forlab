@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Produção</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap card">
+  <h2>🧮 Calculadora</h2>
+  <p>Exemplo: Calcular preço de venda sugerido a partir do custo.</p>
+
+  <label>Custo do Produto (R$)</label>
+  <input id="calcCost" type="number" step="0.01" placeholder="Ex: 3.50">
+
+  <label>Margem de Lucro (%)</label>
+  <input id="calcMargin" type="number" step="1" placeholder="Ex: 50">
+
+  <button class="btn" onclick="calcPrice()">💰 Calcular Preço</button>
+
+  <h3 style="margin-top:20px">Preço sugerido:</h3>
+  <div id="calcResult" class="big">R$ 0,00</div>
+
+  <div style="margin-top:20px">
+    <a href="index.html" class="btn ghost">⬅ Voltar</a>
+  </div>
+</div>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Métricas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+
+  <div class="card">
+    <h2>📊 Métricas</h2>
+    <div class="summary">
+      <div class="box">
+        <div class="muted">Custo mensal da loja</div>
+        <div id="storeCost" class="big">R$ 0,00</div>
+      </div>
+      <div class="box">
+        <div class="muted">Produtos necessários para cobrir custo</div>
+        <ul id="metricsList" style="padding-left:16px;margin:6px 0;text-align:left;"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📦 Vendas do dia</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Preço (R$)</th>
+          <th>Meta (Qtd)</th>
+          <th>Vendidos hoje</th>
+          <th>Arrecadação</th>
+        </tr>
+      </thead>
+      <tbody id="salesTable"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="summary">
+      <div class="box">
+        <div class="muted">Arrecadação total</div>
+        <div id="totalRevenue" class="big">R$ 0,00</div>
+      </div>
+      <div class="box">
+        <div class="muted">% da Meta Atingida</div>
+        <div id="progressPercent" class="big">0%</div>
+      </div>
+    </div>
+    <div style="max-width:400px;margin:20px auto">
+      <canvas id="progressChart"></canvas>
+    </div>
+  </div>
+
+  <div style="margin-top:12px;text-align:center">
+    <a href="index.html" class="btn ghost">⬅ Voltar</a>
+  </div>
+</div>
+  <script src="main.js"></script>
+</body>
+</html>

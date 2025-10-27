@@ -1,0 +1,6 @@
+- Inserir um campo para analisar as vendas de produto a produto (ex: excel)
+- Calcular custo de cada produto
+- gerar um insight de como organizar as finanças
+- Insights de investimento digital (tráfego pago)
+- Gráfica de evolução loja (crescimento de vendas mensal)
+- Gráfico de evolução

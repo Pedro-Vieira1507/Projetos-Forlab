@@ -1,0 +1,87 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.wrap {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+h2, h3 {
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  margin: 8px 0 4px;
+}
+
+input {
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn {
+  background: #0b5fb1;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+.btn:hover { background: #084a8a; }
+.btn.ghost {
+  background: transparent;
+  color: #0b5fb1;
+  border: 1px solid #0b5fb1;
+}
+
+.summary {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+}
+.box {
+  flex: 1;
+  background: #f9fbfc;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+.big {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+.muted {
+  color: #666;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}

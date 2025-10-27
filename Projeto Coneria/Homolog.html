@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Software de Gestão de Produção</title>
+  <style>
+    :root{--bg:#f6f8fb;--card:#ffffff;--accent:#0b5fb1;--muted:#6b7280}
+    body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;margin:0;background:var(--bg);color:#0b2540}
+    .wrap{max-width:980px;margin:28px auto;padding:20px}
+    h1{font-size:22px;margin:0;color:var(--accent)}
+    p{color:var(--muted)}
+    .menu,.card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(11,95,177,0.06)}
+    .menu{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;border:0;cursor:pointer;font-size:15px;font-weight:500}
+    .btn.primary{background:var(--accent);color:white}
+    .btn.ghost{background:transparent;border:1px solid #d7dbea;color:var(--accent)}
+    .hidden{display:none}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px 10px;text-align:left;font-size:14px}
+    thead th{color:var(--muted);font-weight:600}
+    tbody tr{border-top:1px solid #eef2f6}
+    input[type="number"],input[type="text"],select{width:100%;box-sizing:border-box;padding:8px;border:1px solid #e6e9ef;border-radius:8px}
+    .controls{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+    .right{margin-left:auto;display:flex;gap:8px}
+    .summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+    .summary .box{background:#fbfdff;padding:12px;border-radius:10px;border:1px solid #eef5ff}
+    .big{font-size:20px;font-weight:700}
+    .muted{color:var(--muted);font-size:13px}
+    @media(max-width:700px){.summary{grid-template-columns:1fr}.right{margin-left:0}}
+    .remove{background:transparent;border:0;color:#c0392b;cursor:pointer}
+    footer{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Software de Gestão de Produção</h1>
+  <p>Escolha a funcionalidade desejada:</p>
+
+  <!-- Menu -->
+  <div id="menu" class="menu">
+    <button class="btn primary" onclick="showSection('calc')">Calculadora de Produção</button>
+    <button class="btn primary" onclick="showSection('business')">Calculadora de Custo do Negócio</button>
+    <button class="btn ghost" onclick="showSection('metrics')">📊 Métricas</button>
+    <button class="btn ghost" disabled>⚙️ Configurações (em breve)</button>
+  </div>
+
+  <!-- Calculadora de Produção -->
+  <div id="calc" class="card hidden">
+    <h2>Calculadora de Custo de Produção — Doce</h2>
+    <p>Insira cada insumo, quantidade e preço unitário.</p>
+
+    <div class="summary">
+      <div class="box" style="grid-column:1/4">
+        <label class="muted">Nome do Produto</label>
+        <input id="productName" type="text" placeholder="Ex: Bolo de Chocolate" />
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="box" style="grid-column:1/4">
+        <button id="saveCalc">💾 Salvar/Atualizar Cálculo</button>
+        <select id="savedCalcs"><option value="">-- Consultar cálculo salvo --</option></select>
+        <button id="loadCalc">📂 Carregar</button>
+        <button id="deleteCalc">🗑️ Excluir</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <label style="min-width:140px">Rendimento<input id="rend" type="number" min="1" value="10" /></label>
+      <label style="min-width:180px">Moeda
+        <select id="moeda"><option value="R$">R$</option><option value="$">$</option><option value="€">€</option></select>
+      </label>
+      <div class="right">
+        <button id="addRow" class="btn ghost">+ Adicionar insumo</button>
+        <button id="reset" class="btn">Limpar tudo</button>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th>Insumo</th><th style="width:110px">Qtd</th><th style="width:120px">Unidade</th><th style="width:160px">Preço</th><th style="width:140px">Custo</th><th></th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+
+    <div class="summary">
+      <div class="box"><div class="muted">Custo total</div><div id="total" class="big">R$ 0,00</div></div>
+      <div class="box"><div class="muted">Custo por unidade</div><div id="perUnit" class="big">R$ 0,00</div></div>
+    </div>
+
+    <div class="summary">
+      <div class="box" style="grid-column:1/3">
+        <label class="muted">Preço de venda</label>
+        <input id="salePrice" type="number" min="0" step="any" placeholder="Digite o valor" />
+      </div>
+      <div class="box"><div class="muted">Lucro por unidade</div><div id="profitValue" class="big">R$ 0,00</div></div>
+      <div class="box"><div class="muted">Margem</div><div id="profitPercent" class="big">0%</div></div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button id="exportCsv" class="btn">Exportar CSV</button>
+      <button id="cloneRow" class="btn ghost">Duplicar última linha</button>
+      <button class="btn ghost" onclick="showSection('menu')">⬅ Voltar</button>
+    </div>
+  </div>
+
+  <!-- Calculadora de Custos do Negócio -->
+  <div id="business" class="card hidden">
+    <h2>Calculadora de Custos do Negócio</h2>
+    <p>Informe despesas fixas e variáveis.</p>
+
+    <table>
+      <thead><tr><th>Categoria</th><th style="width:180px">Valor</th><th></th></tr></thead>
+      <tbody id="tbodyBusiness"></tbody>
+    </table>
+
+    <div class="summary"><div class="box"><div class="muted">Total mensal</div><div id="totalBusiness" class="big">R$ 0,00</div></div></div>
+
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button id="addRowBusiness" class="btn ghost">+ Adicionar</button>
+      <button id="resetBusiness" class="btn">Limpar</button>
+      <button class="btn ghost" onclick="showSection('menu')">⬅ Voltar</button>
+    </div>
+  </div>
+
+  <!-- Métricas -->
+<div id="metrics" class="card hidden">
+  <h2>📊 Métricas</h2>
+  <div class="summary">
+    <div class="box">
+      <div class="muted">Custo mensal da loja</div>
+      <div id="storeCost" class="big">R$ 0,00</div>
+    </div>
+    <div class="box">
+      <div class="muted">Total arrecadado</div>
+      <div id="totalRevenue" class="big">R$ 0,00</div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="box" style="grid-column:1/3">
+      <div class="muted">Produtos necessários para cobrir custo</div>
+      <ul id="metricsList" style="padding-left:16px;margin:6px 0;"></ul>
+    </div>
+  </div>
+
+  <!-- Barrinha de progresso da meta -->
+  <div class="summary">
+    <div class="box" style="grid-column:1/3">
+      <div class="muted">Progresso da meta</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+        <div style="width:20px;height:100px;border:1px solid #d7dbea;border-radius:6px;overflow:hidden;background:#f6f8fb">
+          <div id="progressBar" style="width:100%;height:0%;background:var(--accent)"></div>
+        </div>
+        <span id="progressPercent" class="big">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px">
+    <button class="btn ghost" onclick="showSection('menu')">⬅ Voltar</button>
+  </div>
+</div>
+
+<!-- Importa Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <footer>Feito para facilitar o cálculo de custos.</footer>
+</div>
+
+<script>
+const tbody = document.getElementById('tbody');
+const addRowBtn = document.getElementById('addRow');
+const resetBtn = document.getElementById('reset');
+const rend = document.getElementById('rend');
+const moeda = document.getElementById('moeda');
+const totalEl = document.getElementById('total');
+const perUnitEl = document.getElementById('perUnit');
+const salePriceInput = document.getElementById('salePrice');
+const profitValueEl = document.getElementById('profitValue');
+const profitPercentEl = document.getElementById('profitPercent');
+const tbodyBusiness = document.getElementById('tbodyBusiness');
+const totalBusinessEl = document.getElementById('totalBusiness');
+const productNameInput = document.getElementById('productName');
+const savedCalcs = document.getElementById('savedCalcs');
+
+// --- Funções principais ---
+function showSection(id){
+  ['menu','calc','business','metrics'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  try{ updateAll(); }catch(e){}
+  try{ updateBusiness(); }catch(e){}
+  try{ updateMetrics(); }catch(e){}
+  populateSavedCalcs();
+}
+
+function formatMoney(v){ const cur=moeda.value||'R$'; return cur+' '+Number(v||0).toFixed(2).replace('.',','); }
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function createRow(data={name:'',qty:0,unit:'g',price:0}){
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input class="in-name" type="text" value="${escapeHtml(data.name)}"/></td>
+    <td><input class="in-qty" type="number" value="${data.qty}"/></td>
+    <td><input class="in-unit" type="text" value="${escapeHtml(data.unit)}"/></td>
+    <td><input class="in-price" type="number" value="${data.price}"/></td>
+    <td class="td-cost">${formatMoney(0)}</td>
+    <td><button class="remove">✕</button></td>`;
+  tr.querySelector('.in-qty').addEventListener('input',updateAll);
+  tr.querySelector('.in-price').addEventListener('input',updateAll);
+  tr.querySelector('.remove').addEventListener('click',()=>{ tr.remove(); updateAll(); });
+  tbody.appendChild(tr);
+  return tr;
+}
+
+function updateProfit(){
+  const costPerUnit = parseFloat(perUnitEl.textContent.replace(/[^\d,.-]/g,'').replace(',','.'))||0;
+  const salePrice = parseFloat(salePriceInput.value)||0;
+  const profit = salePrice - costPerUnit;
+  const margin = salePrice>0?(profit/salePrice)*100:0;
+  profitValueEl.textContent = formatMoney(profit);
+  profitPercentEl.textContent = margin.toFixed(2)+'%';
+}
+
+function updateAll(){
+  const rows = tbody.querySelectorAll('tr');
+  let total = 0;
+  rows.forEach(r=>{
+    const qty = parseFloat(r.querySelector('.in-qty').value)||0;
+    const price = parseFloat(r.querySelector('.in-price').value)||0;
+    const cost = qty*price;
+    r.querySelector('.td-cost').textContent = formatMoney(cost);
+    total += cost;
+  });
+  totalEl.textContent = formatMoney(total);
+  const yieldCount = parseFloat(rend.value)||1;
+  const perUnit = yieldCount>0?total/yieldCount:0;
+  perUnitEl.textContent = formatMoney(perUnit);
+  updateProfit();
+  updateMetrics();
+}
+
+function createBusinessRow(data={cat:'',val:0}){
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input class="in-cat" type="text" value="${escapeHtml(data.cat)}"/></td>
+    <td><input class="in-val" type="number" value="${data.val}"/></td>
+    <td><button class="remove">✕</button></td>`;
+  tr.querySelector('.in-val').addEventListener('input',updateBusiness);
+  tr.querySelector('.remove').addEventListener('click',()=>{ tr.remove(); updateBusiness(); });
+  tbodyBusiness.appendChild(tr);
+  return tr;
+}
+
+function updateBusiness(){
+  const rows = tbodyBusiness.querySelectorAll('tr');
+  let total = 0;
+  rows.forEach(r=>{
+    const val = parseFloat(r.querySelector('.in-val').value)||0;
+    total += val;
+  });
+  totalBusinessEl.textContent = formatMoney(total);
+  updateMetrics();
+}
+
+// --- Salvando, carregando e deletando cálculos ---
+function getCurrentCalc(){
+  const rows = tbody.querySelectorAll('tr');
+  const insumos = Array.from(rows).map(r=>({
+    name: r.querySelector('.in-name').value,
+    qty: parseFloat(r.querySelector('.in-qty').value)||0,
+    unit: r.querySelector('.in-unit').value,
+    price: parseFloat(r.querySelector('.in-price').value)||0
+  }));
+  const totalUnits = parseFloat(rend.value)||1;
+  const totalCost = insumos.reduce((sum,i)=>sum+i.qty*i.price,0);
+  return {
+    productName: productNameInput.value.trim()||'Produto',
+    insumos,
+    total: totalCost,
+    totalUnits,
+    salePrice: parseFloat(salePriceInput.value)||0
+  };
+}
+
+function saveCalc(){
+  let saved = JSON.parse(localStorage.getItem('prodCalcs')||"[]");
+  const current = getCurrentCalc();
+  const existingIndex = saved.findIndex(c=>c.productName===current.productName);
+  if(existingIndex>=0){
+    saved[existingIndex] = current; // atualiza
+  } else {
+    saved.push(current); // adiciona novo
+  }
+  localStorage.setItem('prodCalcs',JSON.stringify(saved));
+  populateSavedCalcs();
+  alert("Cálculo salvo/atualizado!");
+}
+
+function loadCalc(){
+  const selected = savedCalcs.value;
+  if(!selected) return;
+  const saved = JSON.parse(localStorage.getItem('prodCalcs')||"[]");
+  const calc = saved.find(c=>c.productName===selected);
+  if(!calc) return;
+  productNameInput.value = calc.productName;
+  tbody.innerHTML = "";
+  calc.insumos.forEach(i=>createRow(i));
+  rend.value = calc.totalUnits;
+  salePriceInput.value = calc.salePrice||0;
+  updateAll();
+}
+
+function deleteCalc(){
+  const selected = savedCalcs.value;
+  if(!selected) return;
+  let saved = JSON.parse(localStorage.getItem('prodCalcs')||"[]");
+  saved = saved.filter(c=>c.productName!==selected);
+  localStorage.setItem('prodCalcs',JSON.stringify(saved));
+  populateSavedCalcs();
+  alert("Cálculo excluído!");
+}
+
+function populateSavedCalcs(){
+  const saved = JSON.parse(localStorage.getItem('prodCalcs')||"[]");
+  const prev = savedCalcs.value;
+  savedCalcs.innerHTML = `<option value="">-- Consultar cálculo salvo --</option>` + 
+    saved.map(c=>`<option value="${c.productName}">${c.productName}</option>`).join('');
+  if([...savedCalcs.options].some(o=>o.value===prev)) savedCalcs.value = prev;
+}
+
+// --- Métricas ---
+function updateMetrics(){
+  const storeCost = parseFloat(totalBusinessEl.textContent.replace(/[^0-9,-]/g,'').replace(',','.')) || 0;
+  document.getElementById('storeCost').textContent = formatMoney(storeCost);
+
+  const metricsList = document.getElementById('metricsList');
+  const totalRevenueEl = document.getElementById('totalRevenue');
+  const progressBar = document.getElementById('progressBar');
+  const progressPercent = document.getElementById('progressPercent');
+
+  metricsList.innerHTML = "";
+
+  const saved = JSON.parse(localStorage.getItem('prodCalcs') || "[]");
+  if(saved.length===0){ 
+    metricsList.innerHTML="<li>Nenhum produto salvo ainda.</li>"; 
+    totalRevenueEl.textContent = formatMoney(0);
+    progressBar.style.height = "0%";
+    progressPercent.textContent = "0%";
+    return; 
+  }
+
+  let totalProfitUnit = 0;
+  let totalRevenue = 0;
+
+  const profits = saved.map(c=>{
+    const costPerUnit = c.totalUnits>0 ? c.total/c.totalUnits : 0;
+    const profitUnit = (c.salePrice||0) - costPerUnit;
+    if(!c.sold) c.sold = 0; // inicia contador de vendas
+    totalRevenue += c.sold * (c.salePrice||0);
+    totalProfitUnit += profitUnit>0?profitUnit:0;
+    return {name:c.productName||'Produto', profitUnit, costPerUnit, salePrice:c.salePrice||0, sold:c.sold};
+  });
+
+  totalRevenueEl.textContent = formatMoney(totalRevenue);
+
+  if(totalProfitUnit<=0){ 
+    metricsList.innerHTML="<li>Não é possível calcular: nenhum produto gera lucro positivo.</li>"; 
+  } else {
+    profits.forEach((p,idx)=>{
+      if(p.profitUnit<=0) return;
+      const proportion = p.profitUnit / totalProfitUnit;
+      const unitsNeeded = Math.ceil(storeCost * proportion / p.profitUnit);
+      const li = document.createElement('li');
+      li.innerHTML = `
+        ${p.name} → ${unitsNeeded} unid. 
+        (custo/unid ${formatMoney(p.costPerUnit)}, lucro/unid ${formatMoney(p.profitUnit)}) 
+        | Vendidos: ${p.sold} 
+        <button onclick="changeSales(${idx},1)">+1</button> 
+        <button onclick="changeSales(${idx},-1)">-1</button>`;
+      metricsList.appendChild(li);
+    });
+  }
+
+  // Atualiza barra de progresso
+  const percent = storeCost>0 ? Math.min((totalRevenue/storeCost)*100,100) : 0;
+  progressBar.style.height = percent+"%";
+  progressPercent.textContent = percent.toFixed(1)+"%";
+}
+
+// --- Alterar vendas ---
+function changeSales(index,delta){
+  let saved = JSON.parse(localStorage.getItem('prodCalcs')||"[]");
+  if(!saved[index]) return;
+  saved[index].sold = Math.max(0,(saved[index].sold||0)+delta);
+  localStorage.setItem('prodCalcs',JSON.stringify(saved));
+  updateMetrics();
+}
+
+// --- Eventos ---
+addRowBtn.addEventListener('click',()=>{ createRow(); updateAll(); });
+resetBtn.addEventListener('click',()=>{
+  tbody.innerHTML=''; 
+  createRow({name:'Açúcar',qty:500,unit:'g',price:0.01});
+  createRow({name:'Farinha',qty:300,unit:'g',price:0.02});
+  createRow({name:'Ovos',qty:3,unit:'un',price:0.5});
+  updateAll();
+});
+moeda.addEventListener('change',updateAll);
+rend.addEventListener('input',updateAll);
+salePriceInput.addEventListener('input',()=>{ updateProfit(); updateMetrics(); });
+productNameInput.addEventListener('input',updateMetrics);
+
+document.getElementById('saveCalc').addEventListener('click',saveCalc);
+document.getElementById('loadCalc').addEventListener('click',loadCalc);
+document.getElementById('deleteCalc').addEventListener('click',deleteCalc);
+
+// Business
+document.getElementById('addRowBusiness').addEventListener('click', ()=>{ createBusinessRow({cat:'',val:0}); updateBusiness(); });
+document.getElementById('resetBusiness').addEventListener('click', ()=>{
+  tbodyBusiness.innerHTML='';
+  createBusinessRow({cat:'Aluguel',val:2000});
+  createBusinessRow({cat:'Energia',val:800});
+  createBusinessRow({cat:'Funcionários',val:3000});
+  createBusinessRow({cat:'Impostos',val:1200});
+  updateBusiness();
+});
+
+// Inicializa
+(function init(){
+  showSection('menu');
+  createRow({name:'Açúcar',qty:500,unit:'g',price:0.01});
+  createRow({name:'Farinha',qty:300,unit:'g',price:0.02});
+  createRow({name:'Ovos',qty:3,unit:'un',price:0.5});
+  updateAll();
+  createBusinessRow({cat:'Aluguel',val:2000});
+  createBusinessRow({cat:'Energia',val:800});
+  createBusinessRow({cat:'Funcionários',val:3000});
+  createBusinessRow({cat:'Impostos',val:1200});
+  updateBusiness();
+})();
+</script>
+</body>
+</html>
