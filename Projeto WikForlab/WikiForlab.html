@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Wikipedia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header, footer {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            width: 100%;
+            text-align: center;
+        }
+        section {
+            padding: 20px;
+            background-color: #040e33;
+            color: white;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto; /* Centraliza a seção */
+            margin-top: 60px; /* Espaçamento para o cabeçalho */
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto; /* Centraliza a grade */
+        }
+        .grid-item {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .grid-item img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+        .grid-item p {
+            margin-top: 10px;
+        }
+        footer {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            width: 100%;
+            text-align: center;
+            margin-top: auto; /* Empurra para a parte inferior */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.forlabexpress.com.br/static/frontend/Biz/forlab/pt_BR/images/logo.svg">
+    </header>
+    <section>
+        <h2>Wiki Forlab</h2>
+        <p>Conteúdo do artigo vai aqui...</p>
+    </section>
+    <div class="grid">
+        <div class="grid-item">
+            <a href="Fornecedores.html"><img src="https://cdn-icons-png.flaticon.com/512/1924/1924460.png" alt="Ícone 1"></a>
+            <p>Fornecedores</p>
+        </div>
+        <div class="grid-item">
+            <a href="Procedimentos.html"><img src="https://cdn-icons-png.flaticon.com/512/3712/3712153.png" alt="Ícone 2"></a>
+            <p>Procedimentos</p>
+        </div>
+        <div class="grid-item">
+            <a href="Certificados.html"><img src="https://cdn-icons-png.flaticon.com/512/4529/4529398.png" alt="Ícone 3"></a>
+            <p>Certificados</p>
+        </div>
+        <!-- Adicione mais itens conforme necessário -->
+    </div><br>
+    <footer>
+        <h2>Acelerando a ciência da vida</h2>
+    </footer>
+</body>
+</html>

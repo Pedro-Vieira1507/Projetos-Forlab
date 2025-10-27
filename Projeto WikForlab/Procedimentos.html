@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segunda Página</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header, footer {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            width: 100%;
+            text-align: center;
+        }
+        section {
+            padding: 20px;
+            background-color: #040e33;
+            color: white;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            position: relative;
+            bottom: -10px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: black;
+            text-align: center;
+        }
+        td {
+            background-color: #A8A8A8;
+        }
+        button {
+            cursor: pointer;
+        }
+        footer {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            width: 100%;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        /* Estilos do modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Ajustes de layout */
+        #buttonContainer {
+            display: flex;
+            justify-content: flex-start; /* Alinhamento à esquerda */
+            align-items: center;
+            flex-direction: column; /* Organiza os elementos em coluna */
+            margin-top: 10px; /* Adicionado espaço entre a barra de pesquisa e os botões */
+            width: 100%;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        #searchInput {
+            width: calc(100% - 0px); /* Ocupa toda a largura disponível */
+            max-width: 800px; /* Limita a largura máxima */
+            margin-bottom: 10px; /* Adicionado espaço entre a barra de pesquisa e os botões */
+            padding: 5px 10px; /* Adicionado preenchimento */
+            box-sizing: border-box; /* Considera o preenchimento na largura total */
+            position: relative;
+            left: -15px;
+        }
+
+        #buttonContainer input[type="text"],
+        #buttonContainer button {
+            margin-right: 10px;
+        }
+
+        #buttonContainer button {
+            flex-shrink: 0;
+        }
+
+        #confirmationModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        #confirmationModal .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        #confirmationModal .close:hover,
+        #confirmationModal .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #confirmationModal p {
+            margin: 0;
+        }
+
+        #confirmationModal button {
+            margin-top: 10px;
+        }
+
+        #myModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        #myModal .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        #myModal .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        #myModal .close:hover,
+        #myModal .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #myModal input[type="text"] {
+            width: calc(100% - 22px);
+            max-width: 100%;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            box-sizing: border-box;
+        }
+
+        #myModal button {
+            margin-top: 10px;
+        }
+
+        #documentList div,
+        #documentList a {
+            flex: 1;
+            text-align: left;
+        }
+
+        #documentList h2 {
+            flex: 1;
+            text-align: left;
+        }
+
+        #documentList button {
+            margin-left: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="WikiForlab.html"><img src="https://www.forlabexpress.com.br/static/frontend/Biz/forlab/pt_BR/images/logo.svg"></a>
+    </header>
+    <section>
+        <h1>Procedimentos</h1>
+        <p>Aqui você encontra todos os procedimentos da Forlab</p>
+        <div id="buttonContainer">
+            <input type="text" id="searchInput" placeholder="Pesquisar por documento ou setor...">
+            <button id="addDocumentButton">Incluir Novo Certificado</button>
+        </div>
+        <table id="documentList">
+            <thead>
+                <tr>
+                    <th>Documento</th>
+                    <th>Setor</th>
+                    <th>Acesso</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Itens serão adicionados aqui dinamicamente -->
+            </tbody>
+        </table>
+    </section>
+    <footer>
+        <h2>Acelerando a ciência da vida</h2>
+    </footer>
+
+    <!-- Modal de confirmação -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Deseja mesmo excluir este Documento?</p>
+            <button id="confirmDeleteButton">Sim</button>
+            <button id="cancelDeleteButton">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de inclusão de documento -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <input type="text" id="documentNameInput" placeholder="Nome do Documento">
+            <input type="text" id="setorInput" placeholder="Setor">
+            <input type="text" id="linkInput" placeholder="Link de Acesso">
+            <button id="submitBtn">Adicionar</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchInput = document.getElementById('searchInput');
+            const addDocumentButton = document.getElementById('addDocumentButton');
+            const modal = document.getElementById('myModal');
+            const closeModal = modal.querySelector('.close');
+            const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+            const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+            const confirmationModal = document.getElementById('confirmationModal');
+            const documentList = document.getElementById('documentList').getElementsByTagName('tbody')[0];
+
+            // Função para adicionar um novo documento à lista
+            function addDocumentToList(documentName, setor, link) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${documentName}</td>
+                    <td>${setor}</td>
+                    <td><a href="${link}" target="_blank">Acesse aqui</a></td>
+                    <td><button class="deleteButton">Excluir</button></td>
+                `;
+                newRow.querySelector('.deleteButton').addEventListener('click', function() {
+                    confirmationModal.style.display = 'block';
+                    const confirmDelete = function() {
+                        newRow.remove();
+                        removeFromLocalStorage(documentName); // Remove do armazenamento local
+                        confirmationModal.style.display = 'none';
+                    };
+                    confirmDeleteButton.removeEventListener('click', confirmDelete);
+                    confirmDeleteButton.addEventListener('click', confirmDelete);
+                });
+                documentList.appendChild(newRow);
+            }
+
+            // Função para carregar os documentos salvos
+            function loadDocuments() {
+                const savedDocuments = JSON.parse(localStorage.getItem('documents')) || [];
+                savedDocuments.forEach(doc => {
+                    addDocumentToList(doc.documentName, doc.setor, doc.link);
+                });
+            }
+
+            // Função para salvar documentos na localStorage
+            function saveDocumentToLocalStorage(documentName, setor, link) {
+                const documents = JSON.parse(localStorage.getItem('documents')) || [];
+                documents.push({ documentName, setor, link });
+                localStorage.setItem('documents', JSON.stringify(documents));
+            }
+
+            // Função para remover documento da localStorage
+            function removeFromLocalStorage(documentName) {
+                let documents = JSON.parse(localStorage.getItem('documents')) || [];
+                documents = documents.filter(doc => doc.documentName !== documentName);
+                localStorage.setItem('documents', JSON.stringify(documents));
+            }
+
+            // Abre o modal ao clicar no botão "Incluir Novo Documento"
+            addDocumentButton.addEventListener('click', function() {
+                modal.style.display = 'block';
+            });
+
+            // Fecha o modal ao clicar no botão de fechar (X)
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            // Fecha o modal ao clicar fora dele
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Evento de clique no botão "Cancelar" do modal de confirmação
+            cancelDeleteButton.addEventListener('click', function() {
+                confirmationModal.style.display = 'none';
+            });
+
+            // Carrega documentos ao abrir a página
+            loadDocuments();
+
+            // Evento de clique no botão "Adicionar" do modal de inclusão
+            document.getElementById('submitBtn').addEventListener('click', function() {
+                const documentName = document.getElementById('documentNameInput').value;
+                const setor = document.getElementById('setorInput').value;
+                const link = document.getElementById('linkInput').value;
+
+                if (documentName && setor && link) {
+                    addDocumentToList(documentName, setor, link);
+                    saveDocumentToLocalStorage(documentName, setor, link);
+                    modal.style.display = 'none';
+                } else {
+                    alert('Por favor, preencha todos os campos.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segunda Página</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header, footer {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            width: 100%;
+            text-align: center;
+        }
+        section {
+            padding: 20px;
+            background-color: #040e33;
+            color: white;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 60px;
+        }
+        .grid-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        .grid-item {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .grid-item img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+        .grid-item p {
+            margin-top: 10px;
+        }
+        footer {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            width: 100%;
+            text-align: center;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="WikiForlab.html"><img src="https://www.forlabexpress.com.br/static/frontend/Biz/forlab/pt_BR/images/logo.svg"></a>
+    </header>
+    <section>
+        <h1>Fornecedores</h1>
+        <p>Aqui você encontra os conteúdos de todos os fornecedores Forlab</p>
+    </section>
+    <div class="grid-container">
+        <div class="grid">
+            <div class="grid-item">
+                <a href="pagina1.html"><img src="https://static.vecteezy.com/ti/vetor-gratis/p3/7435805-estilo-de-icone-de-lista-de-precos-gratis-vetor.jpg" alt="Ícone 1"></a>
+                <p>Listas de Preço</p>
+            </div>
+            <div class="grid-item">
+                <a href="pagina2.html"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-6tMgq-ZIsil5IYMt6xRgdB40YN7-7wbK-_w3ZlHkJQ&s" alt="Ícone 2"></a>
+                <p>Banco de Imagens</p>
+            </div>
+            <div class="grid-item">
+                <a href="pagina3.html"><img src="icone3.png" alt="Ícone 3"></a>
+                <p>Opção 3</p>
+            </div>
+            <div class="grid-item">
+                <a href="pagina4.html"><img src="icone4.png" alt="Ícone 4"></a>
+                <p>Opção 4</p>
+            </div>
+            <!-- Adicione mais itens conforme necessário -->
+        </div>
+    </div>
+    <footer>
+        <h2>Acelerando a ciência da vida</h2>
+    </footer>
+</body>
+</html>
