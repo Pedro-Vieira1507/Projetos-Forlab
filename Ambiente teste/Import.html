@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Importar Planilhas</title>
+<link rel="stylesheet" href="style-import.css">
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="js-import.js" defer></script>
+</head>
+<style>
+  /* ===== seu CSS existente (mantive as correções da grid) ===== */
+#pedidoLista, #itensPedido, #historicoTable tbody, #logDash {
+    overflow-y: auto;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f4f7fc;
+    margin: 0;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+    margin-bottom: -10px;
+    color: #0b3d91;
+    font-family: 'Poppins', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    position: relative;
+    top: -20px;
+}
+
+/* === Layout 3 colunas corrigido === */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, 450px) 1fr minmax(300px, 450px);
+    gap: 20px;
+    align-items: start;
+    margin-top: 20px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.coluna {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0; /* importante para evitar overflow */
+}
+
+/* === Cards gerais === */
+.last-analysis-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    margin-left: 490px;
+}
+.last-analysis-card h3 {
+    color: #0b3d91;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+.last-analysis-card p {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+/* === Card Botões (mantive) === */
+.button-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #0b5fb1, #0b3d91);
+    color: #fff;
+    padding: 10px;
+    padding-bottom: 0px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.button-card .button-row {
+    display: flex;
+    gap: 15px;
+    padding-top: 10px;
+}
+.button-card button {
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 12px 30px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.button-card button#btnImportar {
+    background: #fff;
+    color: #0b5fb1;
+}
+.button-card button#btnImportar:hover { background: #f0f0f0; }
+.button-card button#btnGerarModelo {
+    background: #28a745;
+    color: #fff;
+}
+.button-card button#btnGerarModelo:hover { background: #218838; }
+#fileName {
+    color: #fff;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+/* === Mensagem de upload (nova) === */
+.upload-msg {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+/* === Inputs upload estilo simples === */
+.upload-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+.upload-row input[type="file"] { display: none; }
+.btn-choose {
+    background:#0b5fb1; color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600;
+}
+.status-ok { color: #28a745; font-weight:700; }
+.status-pend { color: #ff6b00; font-weight:700; }
+
+/* === Métricas === */
+.metrics {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+.metrics .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 25px;
+    text-align: center;
+    min-width: 180px;
+    transition: 0.3s;
+}
+.metrics .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+.metrics .card h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 12px;
+}
+.metrics .card p {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 0;
+    color: #0b3d91;
+}
+
+/* === Gráfico container === */
+.chart-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 25px;
+    text-align: center;
+    max-width: 100%;
+}
+
+/* === Lista de Pedidos === */
+#pedidoLista {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+#pedidoLista h3 { margin-top: 0; color: #0b3d91; }
+#pedidoLista ul { list-style: none; padding: 0; margin: 0; max-height: 210px; overflow-y: auto; }
+#pedidoLista li {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    background: #f9f9f9;
+    font-weight: 500;
+    color: #333;
+    transition: 0.2s;
+}
+#pedidoLista li:hover { background: #e6f0ff; }
+
+/* === Log === */
+#logDash {
+    background: #1a1a1a;
+    color: #0f0;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    height: 180px;
+    overflow-y: auto;
+}
+.icon { width: 22px; height: 22px; color: #0b5fb1; }
+
+</style>
+<body>
+
+<h1>Importar Planilhas</h1>
+
+<div class="dashboard-grid">
+  <div class="coluna">
+    <div class="last-analysis-card" id="etapa1Card">
+      <h3>Etapa 1 — Inserir Planilhas</h3>
+
+      <p class="upload-msg"><strong>Por favor, insira a planilha Histórico de Vendas B.I por Nota</strong></p>
+      <div class="upload-row">
+          <label class="btn-choose" for="planilhaNota">Escolher arquivo</label>
+          <input type="file" id="planilhaNota" accept=".xlsx,.xls,.csv" />
+          <button class="btn-choose" onclick="gerarModelo('nota')">Gerar Modelo</button>
+          <span id="statusNota" class="status-pend">❌ Pendente</span>
+      </div>
+
+      <p class="upload-msg"><strong>Por favor, insira a planilha Histórico de Vendas B.I por Produto</strong></p>
+      <div class="upload-row">
+          <label class="btn-choose" for="planilhaProduto">Escolher arquivo</label>
+          <input type="file" id="planilhaProduto" accept=".xlsx,.xls,.csv" />
+          <button class="btn-choose" onclick="gerarModelo('produto')">Gerar Modelo</button>
+          <span id="statusProduto" class="status-pend">❌ Pendente</span>
+      </div>
+
+      <p class="upload-msg"><strong>Por favor, insira a planilha Relatório de Produtos Site</strong></p>
+      <div class="upload-row">
+          <label class="btn-choose" for="planilhaSite">Escolher arquivo</label>
+          <input type="file" id="planilhaSite" accept=".xlsx,.xls,.csv" />
+          <button class="btn-choose" onclick="gerarModelo('site')">Gerar Modelo</button>
+          <span id="statusSite" class="status-pend">❌ Pendente</span>
+      </div>
+
+      <hr />
+      <button id="gerarAnalise" class="btn-choose" disabled>Gerar Dashboard</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Log Importação -->
+<div id="logImport"></div>
+<script>
+  const arquivos = { nota: null, produto: null, site: null };
+
+const inputNota = document.getElementById('planilhaNota');
+const inputProduto = document.getElementById('planilhaProduto');
+const inputSite = document.getElementById('planilhaSite');
+
+const statusNota = document.getElementById('statusNota');
+const statusProduto = document.getElementById('statusProduto');
+const statusSite = document.getElementById('statusSite');
+
+const gerarAnaliseBtn = document.getElementById('gerarAnalise');
+const logImport = document.getElementById('logImport');
+
+function log(msg){
+    const time = new Date().toLocaleTimeString();
+    logImport.innerHTML += `[${time}] ${msg}<br>`;
+    logImport.scrollTop = logImport.scrollHeight;
+}
+
+function atualizarUI(){
+    statusNota.textContent = arquivos.nota ? '✅ Carregado' : '❌ Pendente';
+    statusNota.className = arquivos.nota ? 'status-ok' : 'status-pend';
+    statusProduto.textContent = arquivos.produto ? '✅ Carregado' : '❌ Pendente';
+    statusProduto.className = arquivos.produto ? 'status-ok' : 'status-pend';
+    statusSite.textContent = arquivos.site ? '✅ Carregado' : '❌ Pendente';
+    statusSite.className = arquivos.site ? 'status-ok' : 'status-pend';
+
+    gerarAnaliseBtn.disabled = !(arquivos.nota && arquivos.produto && arquivos.site);
+}
+
+inputNota.addEventListener('change', e=>{
+    arquivos.nota = e.target.files[0] || null;
+    atualizarUI();
+    log(`Planilha Nota selecionada: ${arquivos.nota ? arquivos.nota.name : 'nenhuma'}`);
+});
+
+inputProduto.addEventListener('change', e=>{
+    arquivos.produto = e.target.files[0] || null;
+    atualizarUI();
+    log(`Planilha Produto selecionada: ${arquivos.produto ? arquivos.produto.name : 'nenhuma'}`);
+});
+
+inputSite.addEventListener('change', e=>{
+    arquivos.site = e.target.files[0] || null;
+    atualizarUI();
+    log(`Planilha Site selecionada: ${arquivos.site ? arquivos.site.name : 'nenhuma'}`);
+});
+
+// Converte arquivo para sessionStorage usando ArrayBuffer
+function fileToSession(key, file){
+    return new Promise((resolve,reject)=>{
+        const reader = new FileReader();
+        reader.onload = e=>{
+            const arr = new Uint8Array(e.target.result);
+            let binary = '';
+            arr.forEach(b=>binary += String.fromCharCode(b));
+            sessionStorage.setItem(key, btoa(binary));
+            resolve();
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+    });
+}
+
+gerarAnaliseBtn.addEventListener('click', async ()=>{
+    try{
+        log('Iniciando leitura dos arquivos...');
+        await fileToSession('notaFile', arquivos.nota);
+        log('Planilha Nota carregada no sessionStorage.');
+        await fileToSession('produtoFile', arquivos.produto);
+        log('Planilha Produto carregada no sessionStorage.');
+        await fileToSession('siteFile', arquivos.site);
+        log('Planilha Site carregada no sessionStorage.');
+        log('Todos os arquivos carregados com sucesso. Redirecionando para o dashboard...');
+        window.location.href = 'dashboard.html';
+    } catch(err){
+        log('Erro ao carregar arquivos: '+err.message);
+    }
+});
+
+// Função para gerar modelo de Excel
+function gerarModelo(tipo){
+    let colunas = [];
+    let nomeArquivo = '';
+
+    switch(tipo){
+        case 'nota':
+            colunas = ['Nota', 'Pedido Internet','DT Emissao', 'DT Saída', 'Total'];
+            nomeArquivo = 'Modelo_Historico_Nota.xlsx';
+            break;
+        case 'produto':
+            colunas = ['SKU', 'Nota', 'QTDE'];
+            nomeArquivo = 'Modelo_Historico_Produto.xlsx';
+            break;
+        case 'site':
+            colunas = ['SKU', 'prazo de disponibilidade'];
+            nomeArquivo = 'Modelo_Produtos_Site.xlsx';
+            break;
+    }
+
+    const ws = XLSX.utils.aoa_to_sheet([colunas]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Modelo');
+    XLSX.writeFile(wb, nomeArquivo);
+}
+</script>
+</body>
+</html>

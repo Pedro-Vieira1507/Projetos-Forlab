@@ -1,0 +1,2 @@
+- Imlementar correção da divergência entre dias corridos e úteis
+- desenvolver solução para medir recorrência de compra por parte dos clientes

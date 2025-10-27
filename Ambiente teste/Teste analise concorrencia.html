@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise de Concorrência Manual Inteligente</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body { font-family: 'Inter', sans-serif; background: #f4f7fa; margin:0; padding:20px; }
+.container { max-width:900px; margin:0 auto; background:#fff; padding:25px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+h1 { text-align:center; margin-bottom:20px;}
+input, button { padding:8px; margin:5px; font-size:14px;}
+input { width: calc(50% - 12px);}
+button { background:#4f46e5; color:#fff; border:none; border-radius:5px; cursor:pointer;}
+button:hover { background:#3b36b0;}
+table { width:100%; border-collapse:collapse; margin-top:20px;}
+table, th, td { border:1px solid #ccc;}
+th, td { padding:8px; text-align:left;}
+#graficoConcorrencia { margin-top:30px;}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Análise de Concorrência Manual Inteligente</h1>
+
+<div id="formulario">
+    <input type="text" id="skuInput" placeholder="SKU">
+    <input type="text" id="urlInput" placeholder="URL do concorrente">
+    <button onclick="adicionarConcorrente()">Adicionar</button>
+</div>
+
+<table id="tabelaConcorrencia">
+    <thead>
+        <tr>
+            <th>SKU</th>
+            <th>URL</th>
+            <th>Preço Concorrente</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<canvas id="graficoConcorrencia"></canvas>
+</div>
+
+<script>
+let concorrentes = [];
+let chartConcorrencia;
+
+async function obterPrecoDaUrl(url) {
+    try {
+        const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+        const resp = await fetch(proxy);
+        const html = await resp.json();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html.contents, 'text/html');
+
+        // 1️⃣ Procura meta itemprop="price"
+        let metaPrice = doc.querySelector('meta[itemprop="price"]');
+        if (metaPrice && metaPrice.content) return parseFloat(metaPrice.content.replace(/[^\d,\.]/g,'').replace(',','.'));
+
+        // 2️⃣ Procura JSON ld+json
+        const scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+        for (let s of scripts) {
+            try {
+                const data = JSON.parse(s.textContent);
+                if (data?.offers?.price) return parseFloat(data.offers.price);
+            } catch(e){ continue; }
+        }
+
+        // 3️⃣ Procura primeiro valor que começa com R$
+        const match = html.contents.match(/R\$\s?[\d\.,]+/);
+        if (match) return parseFloat(match[0].replace('R$', '').replace(/\./g,'').replace(',','.'));
+
+        return null; // não encontrou preço
+    } catch (e) {
+        console.error('Erro ao buscar preço:', e);
+        return null;
+    }
+}
+
+async function adicionarConcorrente() {
+    const sku = document.getElementById('skuInput').value.trim();
+    const url = document.getElementById('urlInput').value.trim();
+
+    if (!sku || !url) { alert('Preencha SKU e URL corretamente.'); return; }
+
+    const preco = await obterPrecoDaUrl(url);
+    if (preco === null) { alert('Não foi possível capturar o preço desta URL.'); return; }
+
+    concorrentes.push({ sku, url, preco });
+    atualizarTabela();
+    atualizarGrafico();
+
+    document.getElementById('skuInput').value = '';
+    document.getElementById('urlInput').value = '';
+}
+
+function atualizarTabela() {
+    const tbody = document.querySelector('#tabelaConcorrencia tbody');
+    tbody.innerHTML = '';
+    concorrentes.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${item.sku}</td><td><a href="${item.url}" target="_blank">${item.url}</a></td><td>R$ ${item.preco.toFixed(2)}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+function atualizarGrafico() {
+    const labels = concorrentes.map(c => c.sku);
+    const dados = concorrentes.map(c => c.preco);
+
+    if (chartConcorrencia) chartConcorrencia.destroy();
+    const ctx = document.getElementById('graficoConcorrencia').getContext('2d');
+    chartConcorrencia = new Chart(ctx, {
+        type:'bar',
+        data:{ labels: labels, datasets:[{ label:'Preço Concorrente', data:dados, backgroundColor:'#4f46e5' }]},
+        options:{ responsive:true, plugins:{ legend:{ display:true }, tooltip:{ enabled:true } }, scales:{ y:{ beginAtZero:true }}}
+    });
+}
+</script>
+</body>
+</html>
